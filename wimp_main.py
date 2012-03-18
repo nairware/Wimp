@@ -243,3 +243,5 @@ def MoveSelection(state, piece):
     print "wtf"    
 
 print PathCoordinates(board_state, UserSelection(board_state))
+
+#test comment added
