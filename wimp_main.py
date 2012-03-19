@@ -3,6 +3,10 @@
 #2. whose turn it is to move
 #3. castling disqualification details
 
+#setup board
+#prompt user to select piece (provide list of pieces)
+#prompt user to move piece (provide list of legal moves)
+
 class Piece:
   p_color = "X"
   p_type = "X"
@@ -60,15 +64,8 @@ PlacePiece(board_state.piece_list[30], "B", "N", 8, 7)
 PlacePiece(board_state.piece_list[31], "B", "R", 8, 8)
 board_state.player_turn = "W"
 
-
-
-#setup board
+#takes a board state as a parameter
 #prompt user to select piece (provide list of pieces)
-#prompt user to move piece (provide list of legal moves)
-
-
-#prompt user to select piece (provide list of pieces)
-#function takes a board state as a parameter
 def UserSelection(state):
   selectables = []
   turn = state.player_turn
@@ -83,13 +80,13 @@ def UserSelection(state):
   for i in range(0, len(selectables)):
     if (selectables[i].p_rank == selection_rank and
       selectables[i].p_file == selection_file):
+      #returns a specific piece
+      #the entire list selectables is all pieces of a player's color
       return selectables[i]
 
-
-
 #receives a board state and a piece as parameters
-#returns list of coordinates, which are on the board, which a piece could
-#move to if there were no barriers (other pieces)
+#returns list of coordinates on the board which are possible move squares
+#these are the possible squares to move to, assuming no piece obstructions
 def PathCoordinates(state, piece):
   path_list = []
   #pawn paths
@@ -118,16 +115,83 @@ def PathCoordinates(state, piece):
       return path_list
   #knight paths
   elif piece.p_type == "N":
-    temp_list = []
-    temp_list.append([piece.p_rank + 2, piece.p_file - 1])
-    temp_list.append([piece.p_rank + 2, piece.p_file + 1])
-    temp_list.append([piece.p_rank + 1, piece.p_file - 2])
-    temp_list.append([piece.p_rank + 1, piece.p_file + 2])
-    temp_list.append([piece.p_rank - 1, piece.p_file - 2])
-    temp_list.append([piece.p_rank - 1, piece.p_file + 2])
-    temp_list.append([piece.p_rank - 2, piece.p_file - 1])
-    temp_list.append([piece.p_rank - 2, piece.p_file + 1])
-    for i in range(8):
+    temp_list = [];
+    match1 = False; match2 = False; match3 = False; match4 = False
+    match5 = False; match6 = False; match7 = False; match8 = False
+    #match1
+    var_r = piece.p_rank + 2; var_f = piece.p_file - 1
+    for i in range(0, len(board_state.piece_list)):
+      if (board_state.piece_list[i].p_rank == var_r and
+          board_state.piece_list[i].p_file == var_f):
+        match1 = True
+        break
+    if match1 == False:
+      temp_list.append([var_r, var_f])
+    #match2
+    var_r = piece.p_rank + 2; var_f = piece.p_file + 1
+    for i in range(0, len(board_state.piece_list)):
+      if (board_state.piece_list[i].p_rank == var_r and
+          board_state.piece_list[i].p_file == var_f):
+        match2 = True
+        break
+    if match2 == False:
+      temp_list.append([var_r, var_f])
+    #match3
+    var_r = piece.p_rank + 1; var_f = piece.p_file - 2
+    for i in range(0, len(board_state.piece_list)):
+      if (board_state.piece_list[i].p_rank == var_r and
+          board_state.piece_list[i].p_file == var_f):
+        match3 = True
+        break
+    if match3 == False:
+      temp_list.append([var_r, var_f])
+    #match4
+    var_r = piece.p_rank + 1; var_f = piece.p_file + 2
+    for i in range(0, len(board_state.piece_list)):
+      if (board_state.piece_list[i].p_rank == var_r and
+          board_state.piece_list[i].p_file == var_f):
+        match4 = True
+        break
+    if match4 == False:
+      temp_list.append([var_r, var_f])
+    #match5
+    var_r = piece.p_rank - 1; var_f = piece.p_file - 2
+    for i in range(0, len(board_state.piece_list)):
+      if (board_state.piece_list[i].p_rank == var_r and
+          board_state.piece_list[i].p_file == var_f):
+        match5 = True
+        break
+    if match5 == False:
+      temp_list.append([var_r, var_f])
+    #match6
+    var_r = piece.p_rank - 1; var_f = piece.p_file + 2
+    for i in range(0, len(board_state.piece_list)):
+      if (board_state.piece_list[i].p_rank == var_r and
+          board_state.piece_list[i].p_file == var_f):
+        match6 = True
+        break
+    if match6 == False:
+      temp_list.append([var_r, var_f])
+    #match7
+    var_r = piece.p_rank - 2; var_f = piece.p_file - 1
+    for i in range(0, len(board_state.piece_list)):
+      if (board_state.piece_list[i].p_rank == var_r and
+          board_state.piece_list[i].p_file == var_f):
+        match7 = True
+        break
+    if match7 == False:
+      temp_list.append([var_r, var_f])
+    #match8
+    var_r = piece.p_rank - 2; var_f = piece.p_file + 1
+    for i in range(0, len(board_state.piece_list)):
+      if (board_state.piece_list[i].p_rank == var_r and
+          board_state.piece_list[i].p_file == var_f):
+        match8 = True
+        break
+    if match8 == False:
+      temp_list.append([var_r, var_f])    
+    #build path_list
+    for i in range(0, len(temp_list)):
       if (temp_list[i][0] >= 1 and temp_list[i][0] <= 8 and
         temp_list[i][1] >= 1 and temp_list[i][1] <= 8):
         path_list.append(temp_list[i])
@@ -243,5 +307,3 @@ def MoveSelection(state, piece):
     print "wtf"    
 
 print PathCoordinates(board_state, UserSelection(board_state))
-
-#test comment added
