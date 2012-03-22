@@ -89,30 +89,80 @@ def UserSelection(state):
 #these are the possible squares to move to, assuming no piece obstructions
 def PathCoordinates(state, piece):
   path_list = []
+
   #pawn paths
   if piece.p_type == "P":
     #white pawn
     if piece.p_color == "W":
       if piece.p_rank + 1 <= 8:
-        path_list.append([piece.p_rank + 1, piece.p_file])
+        match = False
+        for j in range(0, len(board_state.piece_list)):
+          if (board_state.piece_list[j].p_rank == piece.p_rank + 1 and
+              board_state.piece_list[j].p_file == piece.p_file):
+            match = True
+        if match == False:
+          path_list.append([piece.p_rank + 1, piece.p_file])
         if piece.p_file + 1 <= 8:
-          path_list.append([piece.p_rank + 1, piece.p_file + 1])
+          match = False
+          for j in range(0, len(board_state.piece_list)):
+            if (board_state.piece_list[j].p_rank == piece.p_rank + 1 and
+                board_state.piece_list[j].p_file == piece.p_file + 1):
+              match = True
+          if match == False:
+            path_list.append([piece.p_rank + 1, piece.p_file + 1])
         if piece.p_file - 1 >= 1:
-          path_list.append([piece.p_rank + 1, piece.p_file - 1])
+          match = False
+          for j in range(0, len(board_state.piece_list)):
+            if (board_state.piece_list[j].p_rank == piece.p_rank + 1 and
+                board_state.piece_list[j].p_file == piece.p_file - 1):
+              match = True
+          if match == False:
+            path_list.append([piece.p_rank + 1, piece.p_file - 1])
       if piece.p_rank == 2:
-        path_list.append([4, piece.p_file])
+        match = False
+        for j in range(0, len(board_state.piece_list)):
+          if (board_state.piece_list[j].p_rank == 4 and
+              board_state.piece_list[j].p_file == piece.p_file):
+            match = True
+        if match == False:
+          path_list.append([4, piece.p_file])
       return path_list
     #black pawn
     else:
       if piece.p_rank - 1 >= 1:
-        path_list.append([piece.p_rank - 1, piece.p_file])
+        match = False
+        for j in range(0, len(board_state.piece_list)):
+          if (board_state.piece_list[j].p_rank == piece.p_rank - 1 and
+              board_state.piece_list[j].p_file == piece.p_file):
+            match = True
+        if match == False:
+          path_list.append([piece.p_rank - 1, piece.p_file])
         if piece.p_file + 1 <= 8:
-          path_list.append([piece.p_rank - 1, piece.p_file + 1])
+          match = False
+          for j in range(0, len(board_state.piece_list)):
+            if (board_state.piece_list[j].p_rank == piece.p_rank - 1 and
+                board_state.piece_list[j].p_file == piece.p_file + 1):
+              match = True
+          if match == False:
+            path_list.append([piece.p_rank - 1, piece.p_file + 1])
         if piece.p_file - 1 >= 1:
-          path_list.append([piece.p_rank - 1, piece.p_file - 1])
+          match = False
+          for j in range(0, len(board_state.piece_list)):
+            if (board_state.piece_list[j].p_rank == piece.p_rank - 1 and
+                board_state.piece_list[j].p_file == piece.p_file - 1):
+              match = True
+          if match == False:
+            path_list.append([piece.p_rank - 1, piece.p_file - 1])
       if piece.p_rank == 7:
-        path_list.append([5, piece.p_file])
+        match = False
+        for j in range(0, len(board_state.piece_list)):
+          if (board_state.piece_list[j].p_rank == 5 and
+              board_state.piece_list[j].p_file == piece.p_file):
+            match = True
+        if match == False:
+          path_list.append([5, piece.p_file])
       return path_list
+  
   #knight paths
   elif piece.p_type == "N":
     temp_list = [];
@@ -196,6 +246,7 @@ def PathCoordinates(state, piece):
         temp_list[i][1] >= 1 and temp_list[i][1] <= 8):
         path_list.append(temp_list[i])
     return path_list
+  
   #bishop paths
   elif piece.p_type == "B":
     for i in range(1, 8):
@@ -205,13 +256,8 @@ def PathCoordinates(state, piece):
           if (board_state.piece_list[j].p_rank == piece.p_rank + i and
               board_state.piece_list[j].p_file == piece.p_file + i):
             match = True
-            break
-        if match == True:
-          break
-        else:
+        if match == False:
           path_list.append([piece.p_rank + i, piece.p_file + i])
-      else:
-        break
     for i in range(1, 8):
       if piece.p_rank - i >= 1 and piece.p_file + i <= 8:
         match = False
@@ -219,13 +265,8 @@ def PathCoordinates(state, piece):
           if (board_state.piece_list[j].p_rank == piece.p_rank - i and
               board_state.piece_list[j].p_file == piece.p_file + i):
             match = True
-            break
-        if match == True:
-          break
-        else:
+        if match == False:
           path_list.append([piece.p_rank - i, piece.p_file + i])
-      else:
-        break
     for i in range(1, 8):
       if piece.p_rank - i >= 1 and piece.p_file - i >= 1:
         match = False
@@ -233,13 +274,8 @@ def PathCoordinates(state, piece):
           if (board_state.piece_list[j].p_rank == piece.p_rank - i and
               board_state.piece_list[j].p_file == piece.p_file - i):
             match = True
-            break
-        if match == True:
-          break
-        else:
+        if match == False:
           path_list.append([piece.p_rank - i, piece.p_file - i])
-      else:
-        break
     for i in range(1, 8):
       if piece.p_rank + i <= 8 and piece.p_file - i >= 1:
         match = False
@@ -247,78 +283,192 @@ def PathCoordinates(state, piece):
           if (board_state.piece_list[j].p_rank == piece.p_rank + i and
               board_state.piece_list[j].p_file == piece.p_file - i):
             match = True
-            break
-        if match == True:
-          break
-        else:
+        if match == False:
           path_list.append([piece.p_rank + i, piece.p_file - i])  
-      else:
-        break
     return path_list
+  
   #rook paths
   elif piece.p_type == "R":
-    horz_path = [1, 2, 3, 4, 5, 6, 7, 8]
-    vert_path = [1, 2, 3, 4, 5, 6, 7, 8]
-    del horz_path[(piece.p_file - 1)]
-    del vert_path[(piece.p_rank - 1)]
-    horz_coord_list = []
-    vert_coord_list = []
-    for i in range(7):
-      horz_coord_list.append([piece.p_rank, horz_path[i]])
-      vert_coord_list.append([vert_path[i], piece.p_file])
-    path_list = horz_coord_list + vert_coord_list
+    for i in range(1, 8):
+      if piece.p_rank + i <= 8:
+        match = False
+        for j in range(0, len(board_state.piece_list)):
+          if (board_state.piece_list[j].p_rank == piece.p_rank + i and
+              board_state.piece_list[j].p_file == piece.p_file):
+            match = True
+        if match == False:
+          path_list.append([piece.p_rank + i, piece.p_file])
+    for i in range(1, 8):
+      if piece.p_rank - i >= 1:
+        match = False
+        for j in range(0, len(board_state.piece_list)):
+          if (board_state.piece_list[j].p_rank == piece.p_rank - i and
+              board_state.piece_list[j].p_file == piece.p_file):
+            match = True
+        if match == False:
+          path_list.append([piece.p_rank - i, piece.p_file])
+    for i in range(1, 8):
+      if piece.p_file + i <= 8:
+        match = False
+        for j in range(0, len(board_state.piece_list)):
+          if (board_state.piece_list[j].p_rank == piece.p_rank and
+              board_state.piece_list[j].p_file == piece.p_file + i):
+            match = True
+        if match == False:
+          path_list.append([piece.p_rank, piece.p_file + i])
+    for i in range(1, 8):
+      if piece.p_file - i >= 1:
+        match = False
+        for j in range(0, len(board_state.piece_list)):
+          if (board_state.piece_list[j].p_rank == piece.p_rank and
+              board_state.piece_list[j].p_file == piece.p_file - i):
+            match = True
+        if match == False:
+          path_list.append([piece.p_rank, piece.p_file - i])  
     return path_list
+  
   #queen paths
   elif piece.p_type == "Q":
-    horz_path = [1, 2, 3, 4, 5, 6, 7, 8]
-    vert_path = [1, 2, 3, 4, 5, 6, 7, 8]
-    del horz_path[(piece.p_file - 1)]
-    del vert_path[(piece.p_rank - 1)]
-    horz_coord_list = []
-    vert_coord_list = []
-    for i in range(7):
-      horz_coord_list.append([piece.p_rank, horz_path[i]])
-      vert_coord_list.append([vert_path[i], piece.p_file])
-    path_list = horz_coord_list + vert_coord_list
+    for i in range(1, 8):
+      if piece.p_rank + i <= 8:
+        match = False
+        for j in range(0, len(board_state.piece_list)):
+          if (board_state.piece_list[j].p_rank == piece.p_rank + i and
+              board_state.piece_list[j].p_file == piece.p_file):
+            match = True
+        if match == False:
+          path_list.append([piece.p_rank + i, piece.p_file])
+    for i in range(1, 8):
+      if piece.p_rank - i >= 1:
+        match = False
+        for j in range(0, len(board_state.piece_list)):
+          if (board_state.piece_list[j].p_rank == piece.p_rank - i and
+              board_state.piece_list[j].p_file == piece.p_file):
+            match = True
+        if match == False:
+          path_list.append([piece.p_rank - i, piece.p_file])
+    for i in range(1, 8):
+      if piece.p_file + i <= 8:
+        match = False
+        for j in range(0, len(board_state.piece_list)):
+          if (board_state.piece_list[j].p_rank == piece.p_rank and
+              board_state.piece_list[j].p_file == piece.p_file + i):
+            match = True
+        if match == False:
+          path_list.append([piece.p_rank, piece.p_file + i])
+    for i in range(1, 8):
+      if piece.p_file - i >= 1:
+        match = False
+        for j in range(0, len(board_state.piece_list)):
+          if (board_state.piece_list[j].p_rank == piece.p_rank and
+              board_state.piece_list[j].p_file == piece.p_file - i):
+            match = True
+        if match == False:
+          path_list.append([piece.p_rank, piece.p_file - i])  
     for i in range(1, 8):
       if piece.p_rank + i <= 8 and piece.p_file + i <= 8:
-        path_list.append([piece.p_rank + i, piece.p_file + i])
-      else:
-        break
+        match = False
+        for j in range(0, len(board_state.piece_list)):
+          if (board_state.piece_list[j].p_rank == piece.p_rank + i and
+              board_state.piece_list[j].p_file == piece.p_file + i):
+            match = True
+        if match == False:
+          path_list.append([piece.p_rank + i, piece.p_file + i])
     for i in range(1, 8):
       if piece.p_rank - i >= 1 and piece.p_file + i <= 8:
-        path_list.append([piece.p_rank - i, piece.p_file + i])
-      else:
-        break
+        match = False
+        for j in range(0, len(board_state.piece_list)):
+          if (board_state.piece_list[j].p_rank == piece.p_rank - i and
+              board_state.piece_list[j].p_file == piece.p_file + i):
+            match = True
+        if match == False:
+          path_list.append([piece.p_rank - i, piece.p_file + i])
     for i in range(1, 8):
       if piece.p_rank - i >= 1 and piece.p_file - i >= 1:
-        path_list.append([piece.p_rank - i, piece.p_file - i])
-      else:
-        break
+        match = False
+        for j in range(0, len(board_state.piece_list)):
+          if (board_state.piece_list[j].p_rank == piece.p_rank - i and
+              board_state.piece_list[j].p_file == piece.p_file - i):
+            match = True
+        if match == False:
+          path_list.append([piece.p_rank - i, piece.p_file - i])
     for i in range(1, 8):
       if piece.p_rank + i <= 8 and piece.p_file - i >= 1:
-        path_list.append([piece.p_rank + i, piece.p_file - i])
-      else:
-        break
+        match = False
+        for j in range(0, len(board_state.piece_list)):
+          if (board_state.piece_list[j].p_rank == piece.p_rank + i and
+              board_state.piece_list[j].p_file == piece.p_file - i):
+            match = True
+        if match == False:
+          path_list.append([piece.p_rank + i, piece.p_file - i])  
     return path_list
+  
   #king paths
   else:
     if piece.p_rank + 1 <= 8:
-      path_list.append([piece.p_rank + 1, piece.p_file])
+      match = False
+      for j in range(0, len(board_state.piece_list)):
+        if (board_state.piece_list[j].p_rank == piece.p_rank + 1 and
+            board_state.piece_list[j].p_file == piece.p_file):
+          match = True
+      if match == False:
+        path_list.append([piece.p_rank + 1, piece.p_file])
     if piece.p_rank - 1 >= 1:
-      path_list.append([piece.p_rank - 1, piece.p_file])
+      match = False
+      for j in range(0, len(board_state.piece_list)):
+        if (board_state.piece_list[j].p_rank == piece.p_rank - 1 and
+            board_state.piece_list[j].p_file == piece.p_file):
+          match = True
+      if match == False:
+        path_list.append([piece.p_rank - 1, piece.p_file])
     if piece.p_file + 1 <= 8:
-      path_list.append([piece.p_rank, piece.p_file + 1])
+      match = False
+      for j in range(0, len(board_state.piece_list)):
+        if (board_state.piece_list[j].p_rank == piece.p_rank and
+            board_state.piece_list[j].p_file == piece.p_file + 1):
+          match = True
+      if match == False:
+        path_list.append([piece.p_rank, piece.p_file + 1])
     if piece.p_file - 1 >= 1:
-      path_list.append([piece.p_rank, piece.p_file - 1])
+      match = False
+      for j in range(0, len(board_state.piece_list)):
+        if (board_state.piece_list[j].p_rank == piece.p_rank and
+            board_state.piece_list[j].p_file == piece.p_file - 1):
+          match = True
+      if match == False:
+        path_list.append([piece.p_rank, piece.p_file - 1])
     if piece.p_rank + 1 <= 8 and piece.p_file + 1 <= 8:
-      path_list.append([piece.p_rank + 1, piece.p_file + 1])
+      match = False
+      for j in range(0, len(board_state.piece_list)):
+        if (board_state.piece_list[j].p_rank == piece.p_rank + 1 and
+            board_state.piece_list[j].p_file == piece.p_file + 1):
+          match = True
+      if match == False:
+        path_list.append([piece.p_rank + 1, piece.p_file + 1])
     if piece.p_rank - 1 >= 1 and piece.p_file + 1 <= 8:
-      path_list.append([piece.p_rank - 1, piece.p_file + 1])
+      match = False
+      for j in range(0, len(board_state.piece_list)):
+        if (board_state.piece_list[j].p_rank == piece.p_rank - 1 and
+            board_state.piece_list[j].p_file == piece.p_file + 1):
+          match = True
+      if match == False:
+        path_list.append([piece.p_rank - 1, piece.p_file + 1])
     if piece.p_rank - 1 >= 1 and piece.p_file - 1 >= 1:
-      path_list.append([piece.p_rank - 1, piece.p_file - 1])
+      match = False
+      for j in range(0, len(board_state.piece_list)):
+        if (board_state.piece_list[j].p_rank == piece.p_rank - 1 and
+            board_state.piece_list[j].p_file == piece.p_file - 1):
+          match = True
+      if match == False:
+        path_list.append([piece.p_rank - 1, piece.p_file - 1])
     if piece.p_rank + 1 <= 8 and piece.p_file - 1 >= 1:
-      path_list.append([piece.p_rank + 1, piece.p_file - 1])
+      match = False
+      for j in range(0, len(board_state.piece_list)):
+        if (board_state.piece_list[j].p_rank == piece.p_rank + 1 and
+            board_state.piece_list[j].p_file == piece.p_file - 1):
+          match = True
+      if match == False:
+        path_list.append([piece.p_rank + 1, piece.p_file - 1])
     return path_list
 
 #receives a board state and a piece as parameters
